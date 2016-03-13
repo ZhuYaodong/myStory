@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CLOCK</title>
+<style>
+*{margin:0; padding:0;}
+#clock{width:500px; height:500px; border:10px solid #000;  border-radius:50%;
+ position:relative;margin:200px auto;}
+
+#hour{width:12px;height:90px;background:black;border-radius:80% 80% 0px 0px;position:absolute;left:50%;top:160px;z-index:3;
+ margin-left:-6px;
+ -webkit-transform-origin:6px 90px;}
+#minute{width:10px;height:150px;background:red;border-radius:80% 80% 0px 0px;position:absolute;left:50%;top:100px;z-index:2;
+ margin-left:-5px;-webkit-transform-origin:5px 150px;}
+#second{width:5px;height:200px;background:orange;border-radius:80% 80% 0px 0px;position:absolute;left:50%;top:50px;z-index:1;
+ margin-left:-2.5px;-webkit-transform-origin:2.5px 200px;}
+#cen{width:25px; height:25px; background:black; border-radius:50%;position:absolute;left:50%;top:237.5px;z-index:4; margin-left:-12.5px;}
+#clock span{width:6px;height:10px;background:pink;border-radius:50%;position:absolute;left:50%;top:0px;margin-left:-3px;
+-webkit-transform-origin:center 250px; font-size:50px;font-family:微软雅黑;}
+#clock .bigScale{width:8px;height:14px;margin-left:-4px;}
+
+.bigScale strong{position:absolute; top:18px; left:50%; width:60px; text-align:center; margin-left:-30px;}
+
+
+
+</style>
+<script>
+
+document.addEventListener('DOMContentLoaded',function(){
+
+
+var oDiv = document.querySelector('#clock');
+	var left = 0;
+	var top = 0;
+	
+	oDiv.addEventListener('mousedown',function(ev){
+		var disX = ev.clientX-left;
+		var disY = ev.clientY-top;
+		function fnMove(ev){
+			left = ev.clientX-disX;
+			top = ev.clientY-disY;
+			oDiv.style.WebkitTransform='translate('+left+'px,'+top+'px)';
+		}
+		function fnUp(){
+			document.removeEventListener('mousemove',fnMove,false);
+			document.removeEventListener('mouseup',fnUp,false);
+		}
+		document.addEventListener('mousemove',fnMove,false);
+		document.addEventListener('mouseup',fnUp,false);
+		ev.preventDefault();
+	},false);
+	
+	
+	var oClock=document.querySelector("#clock");
+	var oHour=document.querySelector("#hour");			
+	var oMinute=document.querySelector("#minute");
+	var oSencond=document.querySelector("#second");
+	
+	for(var i=0;i<60;i++){
+	var str = 'rotate('+(i*6)+'deg)';
+ 
+	var oSpan=document.createElement("span");
+	oSpan.style.WebkitTransform=str;
+	if(i%5==0){
+		oSpan.className='bigScale';
+		oSpan.innerHTML="<strong>"+i/5+"</strong>";
+		oSpan.innerHTML = oSpan.innerHTML=="<strong>0</strong>"?"<strong>12</strong>":oSpan.innerHTML;
+		var oEle = oSpan.children[0];
+		oEle.style.WebkitTransform='rotate('+(-i*6)+'deg)';
+	}
+	oClock.appendChild(oSpan);
+	};
+	
+	function clockMove(){
+
+		var oDate=new Date();
+		var h=oDate.getHours();
+		var m=oDate.getMinutes();
+		var s=oDate.getSeconds();
+		
+		oHour.style.WebkitTransform='rotate('+(h*30+0.5*m)+'deg)';
+		oMinute.style.WebkitTransform='rotate('+(m*6+s*0.1)+'deg)';
+		oSencond.style.WebkitTransform='rotate('+s*6+'deg)';
+	}
+	clockMove();
+	setInterval(clockMove,1000);
+
+},false);
+
+ 
+</script>
+</head>
+<body>
+ 
+
+
+<div id="clock" >
+<div id="hour"></div>
+<div id="minute"></div>
+<div id="second"></div>
+<div id="cen"></div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
